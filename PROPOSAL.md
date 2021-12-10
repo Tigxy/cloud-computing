@@ -24,8 +24,8 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   [discord.py](https://pypi.org/project/discord.py/) and ensure that communication with a custom 
   Discord server (not publicly exposed for now) works and that it can execute a simple query like ```--echo hello```
   directly on the main service without any microservice.
-  - **Automatic deployment:** Configure with GitHub Actions. Upon merge into the main branch, the main service
-  should be automatically deployed in a Kubernetex environment in a Google Cloud instance. One container 
+  - **Continuous deployment:** Configure with GitHub Actions. Upon merge into the main branch, the main service
+  should be automatically deployed in a Kubernetes environment in a Google Cloud instance. One container 
   should be started for the main service.
   - **Initial Kubernetes/Google Cloud setup:** Setup a Google Cloud instance with Kubernetes that will be used throughout 
   the project to deploy the code.
@@ -42,7 +42,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   to configure the microservice routing rules instead of implementing it manually in the 
   main service.
   - **Security**: Ensure that the microservice endpoints are not publicly accessible.
-  - **Automatic deployment**: Configure with GitHub Actions. Upon merge into the main branch, all the microservices 
+  - **Continuous deployment**: Configure with GitHub Actions. Upon merge into the main branch, all the microservices 
   that are configured to be automatically deployed should be deployed in a Kubernetes environment in a Google
   Cloud instance. One container should be started initially for each microservice - scaling will ensure that we can handle 
   the load later on.
