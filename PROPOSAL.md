@@ -11,6 +11,8 @@ and text messaging. It also allows distributing media and files. Everyone can cr
 and provide a custom structure of channels where text messages can be exchanged. Discord provides libraries 
 to interact with a Discord server, therefore a bot can be made to join a Discord server and listen on chat messages.
 
+The reason that we went for this idea is that all group members use Discord frequently and we all have use-cases for a Discord bot that we would like to implement, sometime. This project would allow us to set up a microservice architecture and deployment model that we could use even after this course.
+
 **Note on engineering:** The code for the Discord bot is not available yet, but we will keep the code implementation to a minimum.
 It is pretty easy to set up a Discord bot with a Discord library, and we will only provide very simple 
 query implementations, e.g. ```--echo hello```, which would only require a one-liner implementation 
