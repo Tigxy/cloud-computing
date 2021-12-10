@@ -2,8 +2,6 @@
 
 ## Overview
 
----
-
 **Idea:** Provide Continuous Deployment of a **Discord bot** to Google Cloud with Github Actions, 
 which uses microservices to handle chat queries and allows automatic scaling of those services.
 Details are in the milestones.
@@ -20,8 +18,6 @@ that returns 'hello'. The main work will be to implement the microservice archit
 works when deployed in CD fashion on a Google Cloud instance, and scaling.
 
 ## Milestones
-
----
 
 + **Proof of concept (main service)**
   - **Architecture:** Set up a Discord client in Python with the library
@@ -71,8 +67,6 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
 
 ## Responsibilities
 
----
-
 **Christian:**
 - Local Discord bot + initial deployment (mainly milestone 1)
 
@@ -85,6 +79,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
 Everyone should create one simple microservice in a programming language of choice.
 
 ## Presentation
+
 1. **Demo - functionality:**
 We will allow everyone to join our Discord server where the bot is running, either with an invitation URL 
 or with a QR code, so that everyone can try out the bot on his own if interested. Then, we'll show 
