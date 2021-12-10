@@ -1,38 +1,106 @@
-## Project proposal
-Idea: Discord Bot which has a main service that listens to discord servers for commands. Multiple microservices are responsible for executing the commands. 
-Each microservice is responsible for a dedicated command pattern, e.g., a message that starts with "--math" should be processed by a calculator microservice,
-and a message that starts with "--tl" should be a translator.
+# Project proposal
 
-We spawn and delete pods / microservice instances based on the current usage of the service.  
-As we plan to target only state-less microservices, we don't need a database.
+## Overview
 
+---
+
+**Idea:** Provide Continuous Deployment of a **Discord bot** to Google Cloud with Github Actions, 
+which uses microservices to handle chat queries and allows automatic scaling of those services.
+Details are in the milestones.
+
+[Discord](https://discord.com/) is an instant messaging platform. Users can communicate with voice calls, video calls 
+and text messaging. It also allows distributing media and files. Everyone can create a Discord server for free 
+and provide a custom structure of channels where text messages can be exchanged. Discord provides libraries 
+to interact with a Discord server, therefore a bot can be made to join a Discord server and listen on chat messages.
+
+**Note on engineering:** The code for the Discord bot is not available yet, but we will keep the code implementation to a minimum.
+It is pretty easy to set up a Discord bot with a Discord library, and we will only provide very simple 
+query implementations, e.g. ```--echo hello```, which would only require a one-liner implementation 
+that returns 'hello'. The main work will be to implement the microservice architecture such that communication 
+works when deployed in CD fashion on a Google Cloud instance, and scaling.
 
 ## Milestones
-- Proof of concept: 
-  - Check whether Discord Bot works locally (using Discord API)
-  - Automatic deployment using Github actions
-    - Kubernetes
-      - for availability we would select one of the non-self-hosted services such as Google Cloud
-  - Discord message listener in main service with some dummy microservice without any functionality
-- Actual microservices
-  - Create microservice architecture that allows dynamic registration / deregistration of microservices on main service
-  - A few very simple microservices for demonstration and their automatic deployment
-  - Ensuring that endpoints are not globally accessible
-- Vertical scaling (more processes on a server)
-  - Load simulation with microservice
-- Optional: 
-  - Support multiple server instances
+
+---
+
++ **Proof of concept (main service)**
+  - **Architecture:** Set up a Discord client in Python with the library
+  [discord.py](https://pypi.org/project/discord.py/) and ensure that communication with a custom 
+  Discord server (not publicly exposed for now) works and that it can execute a simple query like ```--echo hello```
+  directly on the main service without any microservice.
+  - **Automatic deployment:** Configure with GitHub Actions. Upon merge into the main branch, the main service
+  should be automatically deployed in a Kubernetex environment in a Google Cloud instance. One container 
+  should be started for the main service.
+  - **Initial Kubernetes/Google Cloud setup:** Setup a Google Cloud instance with Kubernetes that will be used throughout 
+  the project to deploy the code.
+  - **Demoability:** Set up a Discord server, which the bot can connect to. It should be possible to
+  perform one query which the bot that runs in Google Cloud gives an answer to.
++ **Query/worker microservices:**
+  - **Architecture:** Create a configuration setting on the main service that gives it knowledge
+                      about which microservices can be called and for which query patterns they need 
+                      to be routed to. Each microservice should provide a single REST API method with 
+                      the query string as the input, e.g. ```--echo hello```, and the string that should be 
+                      written into the chat as the output, e.g. ```hello```.
+  - **Architecture advanced (optional):** 
+  Use [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+  to configure the microservice routing rules instead of implementing it manually in the 
+  main service.
+  - **Security**: Ensure that the microservice endpoints are not publicly accessible.
+  - **Automatic deployment**: Configure with GitHub Actions. Upon merge into the main branch, all the microservices 
+  that are configured to be automatically deployed should be deployed in a Kubernetes environment in a Google
+  Cloud instance. One container should be started initially for each microservice - scaling will ensure that we can handle 
+  the load later on.
+  - **Demoability:** 
+  Provide 3 very simple query worker implementations for the demo in optimally 
+  at least two different programming languages, to showcase that this is possible with microservices.   
+  Examples: ```--add 5 2```, ```--time```, ```--echo hello```.
++ **Vertical scaling of individual microservices**
+  - **Configuration:** Configure Kubernetes vertical pod autoscaling to spin up new pods for the query worker
+  microservices, as soon as a microservice is detected to be under stress.
+  - **Demoability:** Write a microservice that allows to simulate a high load scenario to demo vertical scaling. 
+  This microservice should execute for a specific query, e.g. ```--stress 5m```,
+  which would cause the 'stress' microservice to simulate high load for 5 minutes.
+  We plan to use the Python library [stress](https://pypi.org/project/stress/) or 
+  [stresspy](https://pypi.org/project/stressypy/) to simulate high load. It should then be possible 
+  to execute further ```stress 5m``` calls that get routed to other pods, 
+  even though the initially started pod for the microservice is still under load.
++ **Optional**
+  - Support multiple Discord server instances
   - Stateful microservices for e.g. games (tic tac toe?)
-  - Logging of microservice usage 
+  - Logging of microservice usage
 
 ## Responsibilities
-Christian:
-- Local Discord bot + initial deployment
 
-Raphael:
-- Vertical scaling
+---
 
-Christoph:
-- Automatic deployment of microservices
+**Christian:**
+- Local Discord bot + initial deployment (mainly milestone 1)
 
-Everyone should create simple microservices.
+**Christoph:**
+- Automatic deployment of microservices (mainly milestone 2)
+
+**Raphael:**
+- Vertical scaling (mainly milestone 3)
+
+Everyone should create one simple microservice in a programming language of choice.
+
+## Presentation
+1. **Demo - functionality:**
+We will allow everyone to join our Discord server where the bot is running, either with an invitation URL 
+or with a QR code, so that everyone can try out the bot on his own if interested. Then, we'll show 
+our implemented query patterns and the outputs of the bot.
+
+2. **Demo - Continuous Delivery of a new microservice:** 
+We will show how easy it is to create and configure deployment for a new query microservice. We will show that we 
+only need to merge this into the main branch such that we see the change in Discord. 
+We will show what happens in Github Actions and Kubernetes as well.
+
+3. **Demo - Automatic vertical scaling:** 
+We will show that we can run multiple ```stress``` calls simultaneously and how this looks like in Kubernetes.
+We will show that a new pod is spinned up. We will also show how we implemented 
+the stress microservice that simulates high load.
+
+4. **Overview of implementation/configuration:**
+This point might not be standalone but part of the other points in the final presentation.
+We will show an overview of our implementation and configuration and explain our reasoning and experience with those.
+
