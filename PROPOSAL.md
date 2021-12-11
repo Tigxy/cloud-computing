@@ -9,7 +9,7 @@ Details are in the milestones.
 [Discord](https://discord.com/) is an instant messaging platform. Users can communicate with voice calls, video calls 
 and text messaging. It also allows distributing media and files. Everyone can create a Discord server for free 
 and provide a custom structure of channels where text messages can be exchanged. Discord provides libraries 
-to interact with a Discord server, therefore a bot can be made to join a Discord server and listen on chat messages.
+to interact with a Discord server, therefore a bot can be made to join a Discord server and listen and react on chat messages.
 
 The reason that we went for this idea is that all group members use Discord frequently and we all have use-cases for a Discord bot that we would like to implement, sometime. This project would allow us to set up a microservice architecture and deployment model that we could use even after this course.
 
@@ -31,31 +31,31 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   should be started for the main service.
   - **Initial Kubernetes/Google Cloud setup:** Setup a Google Cloud instance with Kubernetes that will be used throughout 
   the project to deploy the code.
-  - **Demoability:** Set up a Discord server, which the bot can connect to. It should be possible to
-  perform one query which the bot that runs in Google Cloud gives an answer to.
+  - **Demonstration:** Set up a Discord server and add the bot to it. It should be possible to
+  perform queries, which the bot, running in Kubernetes, gives an answer to.
 + **Query/worker microservices:**
   - **Architecture:** Create a configuration setting on the main service that gives it knowledge
                       about which microservices can be called and for which query patterns they need 
                       to be routed to. Each microservice should provide a single REST API method with 
                       the query string as the input, e.g. ```--echo hello```, and the string that should be 
-                      written into the chat as the output, e.g. ```hello```.
+                      written into the chat as a result, e.g. ```hello```.
   - **Architecture advanced (optional):** 
   Use [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-  to configure the microservice routing rules instead of implementing it manually in the 
+  to configure the microservice routing rules instead of implementing them manually in the 
   main service.
   - **Security**: Ensure that the microservice endpoints are not publicly accessible.
   - **Continuous deployment**: Configure with GitHub Actions. Upon merge into the main branch, all the microservices 
   that are configured to be automatically deployed should be deployed in a Kubernetes environment in a Google
   Cloud instance. One container should be started initially for each microservice - scaling will ensure that we can handle 
   the load later on.
-  - **Demoability:** 
+  - **Demonstration:** 
   Provide 3 very simple query worker implementations for the demo in optimally 
-  at least two different programming languages, to showcase that this is possible with microservices.   
+  at least two different programming languages, to showcase that the architecture is language agnostic.   
   Examples: ```--add 5 2```, ```--time```, ```--echo hello```.
 + **Vertical scaling of individual microservices**
   - **Configuration:** Configure Kubernetes vertical pod autoscaling to spin up new pods for the query worker
-  microservices, as soon as a microservice is detected to be under stress.
-  - **Demoability:** Write a microservice that allows to simulate a high load scenario to demo vertical scaling. 
+  microservices as soon as a microservice is detected to be under stress.
+  - **Demonstration:** Write a microservice that allows to simulate a high load scenario to demo vertical scaling. 
   This microservice should execute for a specific query, e.g. ```--stress 5m```,
   which would cause the 'stress' microservice to simulate high load for 5 minutes.
   We plan to use the Python library [stress](https://pypi.org/project/stress/) or 
@@ -83,21 +83,20 @@ Everyone should create one simple microservice in a programming language of choi
 ## Presentation
 
 1. **Demo - functionality:**
-We will allow everyone to join our Discord server where the bot is running, either with an invitation URL 
-or with a QR code, so that everyone can try out the bot on his own if interested. Then, we'll show 
-our implemented query patterns and the outputs of the bot.
+We will showcase our bot's functionality by presenting the supported queries together with its response.
+Afterwards, we will invite everyone to join a Discord server where the bot is running on, either with an invitation URL 
+or a QR code, so that everyone can try out the bot on their own. 
 
 2. **Demo - Continuous Delivery of a new microservice:** 
-We will show how easy it is to create and configure deployment for a new query microservice. We will show that we 
-only need to merge this into the main branch such that we see the change in Discord. 
-We will show what happens in Github Actions and Kubernetes as well.
+We will demonstrate the ease of creating and configuring a new query microservice ready for deployment. By merging the
+implementation and changes into the Github branch, CD redeploys the project, making the new microservice accessible 
+in Discord. Moreover, we describe what happens in CD (due to Github Actions) and Kubernetes as well.
 
 3. **Demo - Automatic vertical scaling:** 
-We will show that we can run multiple ```stress``` calls simultaneously and how this looks like in Kubernetes.
-We will show that a new pod is spinned up. We will also show how we implemented 
-the stress microservice that simulates high load.
+We will run multiple ```stress``` calls simultaneously to simulate high load. We will then show indicators of high load
+in Kubernetes and that new pods are spun up as a response to it.
 
 4. **Overview of implementation/configuration:**
 This point might not be standalone but part of the other points in the final presentation.
-We will show an overview of our implementation and configuration and explain our reasoning and experience with those.
+We will give an overview of our implementation and configuration and explain our reasoning and experience.
 
