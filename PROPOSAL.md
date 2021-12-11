@@ -35,7 +35,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   the project to deploy the code.
   - **Demonstration:** Set up a Discord server and add the bot to it. It should be possible to
   perform queries, which the bot, running in Kubernetes, gives an answer to.
-+ **Query/worker microservices:**
++ **Query/worker microservices**
   - **Architecture:** Each microservice should provide a single REST API method with 
   the query string as the input, e.g. ```--echo hello```, and the string that should be 
   written into the chat as a result, e.g. ```hello```. 
