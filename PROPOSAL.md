@@ -19,7 +19,7 @@ query implementations, e.g. ```--echo hello```, which would only require a one-l
 that returns 'hello'. The main work will be to implement the microservice architecture such that communication 
 works when deployed in CD fashion on a Google Cloud instance, and scaling.
 
-![architecture.svg](architecture.svg)
+![architecture.png](architecture.png)
 
 ## Milestones
 
