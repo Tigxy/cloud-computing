@@ -30,7 +30,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   directly on the main service without any microservice.
   - **Continuous deployment:** Configure with GitHub Actions. Upon merge into the main branch, the main service
   should be automatically deployed in a Kubernetes environment in a Google Cloud instance. One container 
-  should be started for the main service.
+  should be started for the main service. A short downtime of the bot is not a big deal, therefore the deployment strategy is RECREATE. 
   - **Initial Kubernetes/Google Cloud setup:** Setup a Google Cloud instance with Kubernetes that will be used throughout 
   the project to deploy the code.
   - **Demonstration:** Set up a Discord server and add the bot to it. It should be possible to
@@ -46,7 +46,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   - **Continuous deployment**: Configure with GitHub Actions. Upon merge into the main branch, all the microservices 
   that are configured to be automatically deployed should be deployed in a Kubernetes environment in a Google
   Cloud instance. One container should be started initially for each microservice - scaling will ensure that we can handle 
-  the load later on.
+  the load later on. A short downtime of the microservices is not a big deal, therefore the deployment strategy is RECREATE. 
   - **Demonstration:** 
   Provide 3 very simple query worker implementations for the demo in optimally 
   at least two different programming languages, to showcase that the architecture is language agnostic.   
@@ -60,7 +60,7 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   We plan to use the Python library [stress](https://pypi.org/project/stress/) or 
   [stresspy](https://pypi.org/project/stressypy/) to simulate high load. It should then be possible 
   to execute further ```stress 5m``` calls that get routed to other pods, 
-  even though the initially started pod for the microservice is still under load.
+  even though the initially started pod for the microservice is still under load. 
 + **Optional**
   - Support multiple Discord server instances
   - Stateful microservices for e.g. games (tic tac toe?)
