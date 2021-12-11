@@ -34,12 +34,9 @@ works when deployed in CD fashion on a Google Cloud instance, and scaling.
   - **Demonstration:** Set up a Discord server and add the bot to it. It should be possible to
   perform queries, which the bot, running in Kubernetes, gives an answer to.
 + **Query/worker microservices:**
-  - **Architecture:** Create a configuration setting on the main service that gives it knowledge
-                      about which microservices can be called and for which query patterns they need 
-                      to be routed to. Each microservice should provide a single REST API method with 
-                      the query string as the input, e.g. ```--echo hello```, and the string that should be 
-                      written into the chat as a result, e.g. ```hello```.
-  - **Architecture advanced (optional):** 
+  - **Architecture:** Each microservice should provide a single REST API method with 
+  the query string as the input, e.g. ```--echo hello```, and the string that should be 
+  written into the chat as a result, e.g. ```hello```. 
   Use [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
   to configure the microservice routing rules instead of implementing them manually in the 
   main service.
