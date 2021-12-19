@@ -1,0 +1,46 @@
+---
+apiVersion: "autoscaling.k8s.io/v1"
+kind: VerticalPodAutoscaler
+metadata:
+  name: micro-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: python-stress-service
+  updatePolicy: 
+    updateMode: Auto
+  resourcePolicy:
+    containerPolicies:
+      - containerName: '*'
+        minAllowed:
+          cpu: 2m
+        maxAllowed:
+          cpu: 1
+        controlledResources: 
+          - cpu
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-stress-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: stress
+  template:
+    metadata:
+      labels:
+        app: stress
+    spec:
+      containers:
+        - name: python-stress-service
+          image: mystes123/python-stress-service:0.0.2
+          ports:
+            - name: web
+              containerPort: 5000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "1m"

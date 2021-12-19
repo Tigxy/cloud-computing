@@ -1,0 +1,3 @@
+docker image build -f Dockerfile -t mystes123/python-stress-service:0.0.2 ./ --progress=plain
+docker image push mystes123/python-stress-service:0.0.2
+kubectl apply -f deployment.yaml
