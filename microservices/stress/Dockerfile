@@ -1,7 +1,5 @@
 FROM python:3.8-slim-buster
 
-LABEL auther=rendstrasser@gmail.com
-
 WORKDIR /opt
 
 COPY requirements.txt requirements.txt
