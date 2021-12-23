@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: discord-service
+spec:
+  containers:
+    - name: discord-service
+      image: ticks/discord-bot:0.0.1
+      env:
+        - name: DISCORD_TOKEN
+          value: "<your-discord-token>" 
+      # ports:
+      #   - name: web
+      #     containerPort: 8888
+      #     protocol: TCP

@@ -84,7 +84,5 @@ if not token:
 	print("Exiting.")
 	exit()
 
+print("Bot is running...")
 client.run(token)
-
-
-
