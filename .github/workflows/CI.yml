@@ -51,6 +51,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ${GITHUB_WORKSPACE}/src/bot
+          context: $GITHUB_WORKSPACE/src/bot
           push: true
           tags: ticks/discord-bot:${{ steps.vars.outputs.sha_short }}
