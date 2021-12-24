@@ -66,13 +66,13 @@ jobs:
       # Provide the discord access token for the bot by replacing the placeholder
       - name: Set discord access token
         shell: bash
-        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/src/bot/pod.yaml
+        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/src/bot/deployment.yaml
 
       # Deploy the bot
       - uses: Azure/k8s-deploy@v1.4
         with:
           manifests: |
-              ${{ github.workspace }}/src/bot/pod.yaml
+              ${{ github.workspace }}/src/bot/deployment.yaml
           images: 'ticks/discord-bot:${{ steps.vars.outputs.sha_short }}'
           kubectl-version: 'latest'
 
