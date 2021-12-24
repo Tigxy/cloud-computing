@@ -1,8 +1,8 @@
-FROM python:3.9
+FROM python:3.9-slim-buster
 
 WORKDIR /opt
 RUN mkdir -p app
-WORKDIR ./app
+WORKDIR /opt/app
 
 # Install requirements
 COPY requirements.txt ./
