@@ -17,7 +17,10 @@ async def on_message(message):
     print(f"Received message on '{message.guild}' in '{message.channel}' from '{message.author}'")
 
     msg = message.content
-    if msg == "!help":
+    if not msg.startswith("!"):
+        return
+
+    elif msg == "!help":
         await message.channel.send(f"Possible commands: !help, !echo, !time, !pi, !math")
 
     elif msg == "!greet":
