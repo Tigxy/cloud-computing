@@ -21,7 +21,7 @@ async def on_message(message):
         return
 
     elif msg == "!help":
-        await message.channel.send(f"Possible commands: !help, !echo, !time, !pi, !math")
+        await message.channel.send(f"Possible commands: !help, !greet, !echo, !time, !pi, !math")
 
     elif msg == "!greet":
         await message.channel.send(f"Hello! I have been automatically deployed by Github Actions! :partying_face:")
