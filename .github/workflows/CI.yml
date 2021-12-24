@@ -66,7 +66,7 @@ jobs:
       # Provide the discord access token for the bot by replacing the placeholder
       - name: Set discord access token
         shell: bash
-        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}" ${{ github.workspace }}/src/bot/pod.yaml
+        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/gp" ${{ github.workspace }}/src/bot/pod.yaml
 
       # Deploy the bot
       - uses: Azure/k8s-deploy@v1.4
