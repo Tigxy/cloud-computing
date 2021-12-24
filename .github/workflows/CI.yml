@@ -4,7 +4,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ main, github-ci ]
   pull_request:
     branches: [ main ]
 
@@ -71,12 +71,11 @@ jobs:
           _input-file: '${{ github.workspace }}/src/bot/pod.yaml'
           _format-key: '<key>'
           _output-file: '${{ github.workspace }}/src/bot/pod.yaml'
-          SECRET_DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          SECRET_DISCORD_TOKEN: '${{ secrets.DISCORD_TOKEN }}'
 
       # Deploy the bot
       - uses: Azure/k8s-deploy@v1.4
         with:
-          namespace: 'discord-bot'
           manifests: |
               ${{ github.workspace }}/src/bot/pod.yaml
           images: 'ticks/discord-bot:${{ steps.vars.outputs.sha_short }}'
