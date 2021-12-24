@@ -8,7 +8,7 @@ spec:
       image: ticks/discord-bot:0.0.1
       env:
         - name: DISCORD_TOKEN
-          value: "<your-discord-token>" 
+          value: "<SECRET_DISCORD_TOKEN>" 
       # ports:
       #   - name: web
       #     containerPort: 8888
