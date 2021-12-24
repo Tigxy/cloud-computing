@@ -57,11 +57,11 @@ jobs:
       
       # Log into Azure
       - uses: azure/aks-set-context@v1
-            with:
-                creds: '${{ secrets.AZURE_CREDENTIALS }}'
-                resource-group: 'cloud-computing'
-                cluster-name: 'cloud-computing'
-            id: login
+        with:
+            creds: '${{ secrets.AZURE_CREDENTIALS }}'
+            resource-group: 'cloud-computing'
+            cluster-name: 'cloud-computing'
+        id: login
 
       # Provide the discord access token for the bot
       - name: Set discord access token
