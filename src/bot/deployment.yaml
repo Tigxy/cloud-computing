@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: discord-bot
+
+  template:
+    metadata:
+      labels:
+        app: discord-bot
+    spec:
+      containers:
+        - name: discord-bot
+          image: ticks/discord-bot:test1 # will automatically be replaced with k8s-deploy action, see https://github.com/Azure/k8s-deploy/tree/main
+          env:
+            - name: DISCORD_TOKEN
+              value: <SECRET_DISCORD_TOKEN>
+          # ports:
+          #   - name: web
+          #     containerPort: 8888
+          #     protocol: TCP

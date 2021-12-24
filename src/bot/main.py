@@ -17,8 +17,14 @@ async def on_message(message):
     print(f"Received message on '{message.guild}' in '{message.channel}' from '{message.author}'")
 
     msg = message.content
-    if msg == "!help":
-        await message.channel.send(f"Possible commands: !help, !echo, !time, !pi, !math")
+    if not msg.startswith("!"):
+        return
+
+    elif msg == "!help":
+        await message.channel.send(f"Possible commands: !help, !greet, !echo, !time, !pi, !math")
+
+    elif msg == "!greet":
+        await message.channel.send(f"Hello! I have been automatically deployed by Github Actions! :partying_face:")
 
     elif msg.startswith("!echo"):
         await message.channel.send(msg[len('!echo '):])
@@ -84,5 +90,6 @@ if not token:
 	print("Exiting.")
 	exit()
 
+print("token is", token)
 print("Bot is running...")
 client.run(token)

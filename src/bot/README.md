@@ -43,3 +43,13 @@
 
 - Stop minikube, can also be used to then start it again with other restriction on resources  
   `minikube stop`
+  
+### Setup Github CI with Azure Kubernetes:
+- Get Azure login credentials by running `az ad sp create-for-rbac --sdk-auth``
+- Store credentials in Github secrets as `AZURE_CREDENTIALS`
+- Save Discord token in Github secrets as `DISCORD_TOKEN`, can be obtained from Discord App site
+- Store docker hub user in `DOCKERHUB_USERNAME` and access token in `DOCKERHUB_TOKEN` (from https://hub.docker.com/settings/security)
+- Prepare / reuse CI file (`.github/workflows/CI.yml`)
+- Push changes to main branch and it should automatically (re)deploy to Kubernetes.
+
+Note: The manifest we want to deploy with should be of kind 'deployment', otherwise updating some fields of the file may fail. 
