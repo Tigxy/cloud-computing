@@ -63,6 +63,10 @@ jobs:
         shell: bash
         run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/src/bot/deployment.yaml
 
+      - name: Set image in deployment file
+        shell: bash
+        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/src/bot/deployment.yaml
+
     #  # Log into Azure
     #  - uses: azure/aks-set-context@v1
     #    with:

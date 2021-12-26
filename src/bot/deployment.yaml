@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: discord-bot
-          image: ticks/discord-bot:test1 # will automatically be replaced with k8s-deploy action, see https://github.com/Azure/k8s-deploy/tree/main
+          image: ticks/discord-bot:<TAG> 
           env:
             - name: DISCORD_TOKEN
               value: <SECRET_DISCORD_TOKEN>
