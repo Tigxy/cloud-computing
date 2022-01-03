@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: microservice-echo
+
+  template:
+    metadata:
+      labels:
+        app: microservice-echo
+    spec:
+      containers:              
+        - name: microservice-echo
+          image: ticks/microservices-echo:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: "7001"
+          ports: 
+            - containerPort: 7001

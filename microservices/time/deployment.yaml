@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-time
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: microservice-time
+
+  template:
+    metadata:
+      labels:
+        app: microservice-time
+    spec:
+      containers:              
+        - name: microservice-time
+          image: ticks/microservices-time:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: "7002"
+          ports: 
+            - containerPort: 7002
