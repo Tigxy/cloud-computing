@@ -6,7 +6,7 @@ spec:
   selector:
     app: discord-bot
   ports:
-    - protocol: HTTP
+    - protocol: TCP
       port: 7000
 ---
 
