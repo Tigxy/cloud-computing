@@ -37,7 +37,7 @@ spec:
             - name: registration
               containerPort: 7000
               
-        - name: microservice-echo:
+        - name: microservice-echo
           image: ticks/microservices-echo:<TAG>
           env:
             - name: MICROSERVICE_PORT
@@ -46,7 +46,7 @@ spec:
             - name: service-interface
               containerPort: 7001
               
-        - name: microservice-time:
+        - name: microservice-time
           image: ticks/microservices-time:<TAG>
           env:
             - name: MICROSERVICE_PORT
@@ -55,7 +55,7 @@ spec:
             - name: service-interface
               containerPort: 7002
               
-        - name: microservice-math:
+        - name: microservice-math
           image: ticks/microservices-math:<TAG>
           env:
             - name: MICROSERVICE_PORT
