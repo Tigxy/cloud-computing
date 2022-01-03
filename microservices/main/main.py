@@ -82,6 +82,11 @@ if __name__ == "__main__":
         print("Exiting.")
         exit()
 
+    port = os.environ.get('SERVICE_PORT')
+    if not port:
+        print("Port not defined via environment variable, exiting.")
+        exit()
+
     # checkout https://stackoverflow.com/a/55054500 for problem description
     client = discord.Client()
     configure_discord_client(client)
@@ -93,7 +98,7 @@ if __name__ == "__main__":
     app = Flask(__name__)
     configure_registration_endpoint(app)
     loop = asyncio.get_event_loop()
-    loop.create_task(app.run(host='0.0.0.0', port=7000))
+    loop.create_task(app.run(host='0.0.0.0', port=port))
     registration_thread = Thread(target=loop.run_forever)
     registration_thread.start()
 

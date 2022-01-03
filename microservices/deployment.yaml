@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-discord
+spec:
+  selector:
+    app: discord-bot
+  ports:
+    - protocol: HTTP
+      port: 7000
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +31,36 @@ spec:
           env:
             - name: DISCORD_TOKEN
               value: <SECRET_DISCORD_TOKEN>
-          # ports:
-          #   - name: web
-          #     containerPort: 8888
-          #     protocol: TCP
+            - name: SERVICE_PORT
+              value: 7000
+          ports:
+            - name: registration
+              containerPort: 7000
+              
+        - name: microservice-echo:
+          image: ticks/microservices-echo:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: 7001
+          ports: 
+            - name: service-interface
+              containerPort: 7001
+              
+        - name: microservice-time:
+          image: ticks/microservices-time:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: 7002
+          ports: 
+            - name: service-interface
+              containerPort: 7002
+              
+        - name: microservice-math:
+          image: ticks/microservices-math:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: 7003
+          ports: 
+            - name: service-interface
+              containerPort: 7003
+              

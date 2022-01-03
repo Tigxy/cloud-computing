@@ -4,7 +4,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ main, microservice-architecture ]
   pull_request:
     branches: [ main ]
 
@@ -49,23 +49,54 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
+      # ================================== BUILDING MICROSERVICES ==================================
+      
       # Build a Docker image based on provided Dockerfile
-      - name: Build and push
+      - name: Build and push discord main service
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ${{ github.workspace }}/src/bot
+          context: ${{ github.workspace }}/microservices/main
           push: true
           tags: ticks/discord-bot:${{ steps.vars.outputs.sha_short }}
+      
+      # Build a Docker image based on provided Dockerfile
+      - name: Build and push discord echo service
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/microservices/echo
+          push: true
+          tags: ticks/microservices-echo:${{ steps.vars.outputs.sha_short }}
+      
+      # Build a Docker image based on provided Dockerfile
+      - name: Build and push discord math service
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/microservices/math
+          push: true
+          tags: ticks/microservices-math:${{ steps.vars.outputs.sha_short }}
+      
+      # Build a Docker image based on provided Dockerfile
+      - name: Build and push discord time service
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/microservices/time
+          push: true
+          tags: ticks/microservices-time:${{ steps.vars.outputs.sha_short }}
+          
+      # ================================== DONE ==================================
       
       # Provide the discord access token for the bot by replacing the placeholder
       - name: Set discord access token
         shell: bash
-        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/src/bot/deployment.yaml
+        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/microservices/deployment.yaml
 
       - name: Set image in deployment file
         shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/src/bot/deployment.yaml
+        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/deployment.yaml
 
     #  # Log into Azure
     #  - uses: azure/aks-set-context@v1
@@ -80,7 +111,7 @@ jobs:
     #  - uses: Azure/k8s-deploy@v1.4
     #    with:
     #      manifests: |
-    #          ${{ github.workspace }}/src/bot/deployment.yaml
+    #          ${{ github.workspace }}/microservices/deployment.yaml
     #      images: 'ticks/discord-bot:${{ steps.vars.outputs.sha_short }}'
     #      kubectl-version: 'latest'
 
@@ -110,6 +141,6 @@ jobs:
       # Deploy image to the GKE cluster
       - name: Deploy
         run: |-
-          kubectl apply -f ${{ github.workspace }}/src/bot/deployment.yaml
+          kubectl apply -f ${{ github.workspace }}/microservices/deployment.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
