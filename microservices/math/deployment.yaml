@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-math
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: microservice-math
+
+  template:
+    metadata:
+      labels:
+        app: microservice-math
+    spec:
+      containers:
+        - name: microservice-math
+          image: ticks/microservices-math:<TAG>
+          env:
+            - name: MICROSERVICE_PORT
+              value: "7003"
+          ports: 
+            - containerPort: 7003

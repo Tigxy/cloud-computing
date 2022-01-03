@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-discord
+spec:
+  selector:
+    app: discord-bot
+  ports:
+    - protocol: TCP
+      port: 7000
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +31,7 @@ spec:
           env:
             - name: DISCORD_TOKEN
               value: <SECRET_DISCORD_TOKEN>
-          # ports:
-          #   - name: web
-          #     containerPort: 8888
-          #     protocol: TCP
+            - name: SERVICE_PORT
+              value: "7000"
+          ports:
+            - containerPort: 7000
