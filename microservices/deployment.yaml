@@ -32,35 +32,31 @@ spec:
             - name: DISCORD_TOKEN
               value: <SECRET_DISCORD_TOKEN>
             - name: SERVICE_PORT
-              value: 7000
+              value: "7000"
           ports:
-            - name: registration
-              containerPort: 7000
+            - containerPort: 7000
               
         - name: microservice-echo
           image: ticks/microservices-echo:<TAG>
           env:
             - name: MICROSERVICE_PORT
-              value: 7001
+              value: "7001"
           ports: 
-            - name: service-interface
-              containerPort: 7001
+            - containerPort: 7001
               
         - name: microservice-time
           image: ticks/microservices-time:<TAG>
           env:
             - name: MICROSERVICE_PORT
-              value: 7002
+              value: "7002"
           ports: 
-            - name: service-interface
-              containerPort: 7002
+            - containerPort: 7002
               
         - name: microservice-math
           image: ticks/microservices-math:<TAG>
           env:
             - name: MICROSERVICE_PORT
-              value: 7003
+              value: "7003"
           ports: 
-            - name: service-interface
-              containerPort: 7003
+            - containerPort: 7003
               
