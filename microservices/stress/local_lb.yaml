@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-lb
+  labels:
+    app: micro-lb
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: stress
+  type: LoadBalancer
