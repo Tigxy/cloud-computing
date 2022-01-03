@@ -4,6 +4,11 @@ WORKDIR /opt
 RUN mkdir -p app
 WORKDIR /opt/app
 
+# Install git as it is required in requirements.txt
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
 # Install requirements
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
