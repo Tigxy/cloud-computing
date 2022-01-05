@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: discord-ingress
+  namespace: k8s-discord  
+  annotations:
+     nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: <INGRESS_HOST>
+      http:
+        paths:
+          - path: /register
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-service-main
+                port:
+                  number: 7000 
+          - path: /echo
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-service-echo 
+                port:
+                  number: 8080
+          - path: /math
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-service-math 
+                port:
+                  number: 8080
+          - path: /time
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-service-time
+                port:
+                  number: 8080
+          - path: /binary
+            pathType: Prefix
+            backend:
+              service:
+                name: k8s-service-binary
+                port:
+                  number: 8080

@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: main-discord
+  name: k8s-service-main
+  namespace: k8s-discord
 spec:
   selector:
     app: discord-bot
@@ -14,6 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: discord-bot
+  namespace: k8s-discord
 spec:
   replicas: 1
   selector:
@@ -27,10 +29,12 @@ spec:
     spec:
       containers:
         - name: discord-bot
-          image: ticks/discord-bot:<TAG> 
+          image: <DOCKER_USER>/discord-bot:<TAG>
           env:
+            - name: INGRESS_HOST
+              value: "http://<INGRESS_HOST>/"
             - name: DISCORD_TOKEN
-              value: <SECRET_DISCORD_TOKEN>
+              value: <DISCORD_TOKEN>
             - name: SERVICE_PORT
               value: "7000"
           ports:
