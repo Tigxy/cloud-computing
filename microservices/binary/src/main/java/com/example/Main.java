@@ -1,5 +1,6 @@
 package com.example;
 
+import jakarta.ws.rs.ProcessingException;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 
 /**
@@ -57,10 +59,11 @@ public class Main {
 
 
         while (!mainService.isRegistered()) {
-            mainService.register("binary", MICROSERVICE_PORT);
-
             try {
+                mainService.register("binary", MICROSERVICE_PORT);
                 Thread.sleep(10);
+            } catch (ProcessingException ex) {
+                logger.error("ProcessingException", ex);
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }

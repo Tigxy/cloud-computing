@@ -37,3 +37,9 @@ spec:
               value: "7001"
           ports: 
             - containerPort: 7001
+          readinessProbe:
+            httpGet:
+              path: /echo/health
+              port: 7001
+            initialDelaySeconds: 5
+            periodSeconds: 5

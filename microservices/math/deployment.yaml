@@ -38,3 +38,9 @@ spec:
               value: "7003"
           ports: 
             - containerPort: 7003
+          readinessProbe:
+            httpGet:
+              path: /math/health
+              port: 7003
+            initialDelaySeconds: 5
+            periodSeconds: 5

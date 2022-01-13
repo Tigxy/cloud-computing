@@ -35,7 +35,15 @@ spec:
               value: "http://<INGRESS_HOST>/"
             - name: DISCORD_TOKEN
               value: <DISCORD_TOKEN>
+            - name: BOT_COMMAND_PREFIX
+              value: <BOT_COMMAND_PREFIX>
             - name: SERVICE_PORT
               value: "7000"
           ports:
             - containerPort: 7000
+          readinessProbe:
+            httpGet:
+              path: /register/health
+              port: 7000
+            initialDelaySeconds: 5
+            periodSeconds: 5

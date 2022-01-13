@@ -2,11 +2,12 @@ package com.example;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
- * Root resource (exposed at "/" path)
+ * Root resource (exposed at "/binary" path)
  */
-@Path("/")
+@Path("/binary")
 public class BinaryResource {
 
     /**
@@ -16,6 +17,11 @@ public class BinaryResource {
      * @return String that will be returned as a text/plain response.
      */
 
+    @GET
+    @Path("/health")
+    public Response health() {
+        return Response.status(Response.Status.OK).build();
+    }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)

@@ -2,15 +2,18 @@ import logging
 import os
 import time
 import requests
-from flask import request, Flask
+from flask import request, Flask, Response
 
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET"])
+@app.route("/echo", methods=["GET"])
 def service():
     return request.args.get("data")
 
+@app.route("/echo/health", methods=["GET"])
+def health():
+    return Response(status=200)
 
 if __name__ == "__main__":
 

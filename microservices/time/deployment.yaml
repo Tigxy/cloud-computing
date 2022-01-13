@@ -38,3 +38,9 @@ spec:
               value: "7002"
           ports: 
             - containerPort: 7002
+          readinessProbe:
+            httpGet:
+              path: /time/health
+              port: 7002
+            initialDelaySeconds: 5
+            periodSeconds: 5

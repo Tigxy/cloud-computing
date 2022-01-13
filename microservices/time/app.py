@@ -2,15 +2,18 @@ import logging
 import os
 import time
 import requests
-from flask import request, Flask
+from flask import request, Flask, Response
 
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET"])
+@app.route("/time", methods=["GET"])
 def service():
     return f"Today is {time.strftime('%A, %d.%m.%y. It is %H:%M:%S!')}"
 
+@app.route("/time/health", methods=["GET"])
+def health():
+    return Response(status=200)
 
 if __name__ == "__main__":
 
