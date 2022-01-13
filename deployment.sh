@@ -1,3 +1,15 @@
+# TODO: azure, gke
+# TODO: fix sed replacement issue with ingress host string
+# add variable CLUSTER_IP
+echo "Enter deplyoment TARGET (local|gcloud)"
+read TARGET
+
+# SET KUBECTL CONTEXT TO GCLOUD CLUSTER
+echo "Enter K8S_CLUSTER_CONTEXT GKE cluster for kubectl:"
+read K8s_CLUSTER_CONTEXT
+
+kubectx $K8S_CLUSTER_CONTEXT 
+
 # INIT VARIABLES
 echo "Enter docker user:"
 read DOCKER_USER
@@ -5,8 +17,22 @@ read DOCKER_USER
 echo "Enter current TAG:"
 read TAG
 
+kubectl create namespace k8s-discord
+
+
+#echo "Enter STATIC_INGRESS_IP:"
+#read STATIC_INGRESS_IP
+
 echo "Enter INGRESS_HOST (e.g. http://<INGRESS_HOST>)":
 read INGRESS_HOST
+
+echo "Enter DISCORD_TOKEN for your bot":
+read DISCORD_TOKEN
+
+
+echo "Enter BOT_COMMAND_PREFIX for your bot:"
+read BOT_COMMAND_PREFIX
+
 
 # CREATE MICROSERVICE YAML FILES
 cd ./microservices
@@ -16,6 +42,8 @@ for d in */ ; do
     sed "s/<TAG>/$TAG/g" "$d/deployment.yaml" > "$d/deployment_$TAG.yaml"
     sed -i "s/<DOCKER_USER>/$DOCKER_USER/g" "$d/deployment_$TAG.yaml"
     sed -i "s/<INGRESS_HOST>/$INGRESS_HOST/g" "$d/deployment_$TAG.yaml"
+    sed -i "s/<DISCORD_TOKEN>/$DISCORD_TOKEN/g" "$d/deployment_$TAG.yaml"
+    sed -i "s/<BOT_COMMAND_PREFIX>/$BOT_COMMAND_PREFIX/g" "$d/deployment_$TAG.yaml"
 done
 
 
@@ -45,19 +73,25 @@ kubectl delete deployment microservice-binary -n k8s-discord
 
 # APPLY MICROSERVICE DEPLOYMENTS
 kubectl apply -f "./main/deployment_$TAG.yaml" -n k8s-discord
-sleep 15s
+sleep 60s # timeout for terminating pods
 kubectl apply -f "./echo/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./math/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./time/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./binary/deployment_$TAG.yaml" -n k8s-discord
 
-# APPLY INGRESS
-cd ../
-sed -i "s/<INGRESS_HOST>/$INGRESS_HOST/g" "./ingress_$TAG.yaml"
-kubectl apply -f "./ingress_$TAG.yaml" -n k8s-discord
+
+cd ..
+# APPLY INGRESS          
+sed "s/<INGRESS_HOST>/$INGRESS_HOST/g" "./ingress_$TARGET.yaml" > "./ingress_$TARGET_$TAG.yaml"
+kubectl apply -f "./ingress_$TARGET_$TAG.yaml" -n k8s-discord
+# CLEANUP INGRES YAML
+rm "./ingress_$TARGET_$TAG.yaml"
+
+kubectl get ingress discord-ingress -n k8s-discord
+
 
 # CLEANUP YAML FILES
-rm "./ingress_$TAG.yaml"
+
 cd ./microservices
 for d in */ ; do
     [ -L "${d%/}" ] && continue
@@ -65,5 +99,4 @@ for d in */ ; do
 done
 
 # OUTPUT INFORMATION
-minikube ip
 kubectl get pods -n k8s-discord
