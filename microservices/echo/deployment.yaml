@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: k8s-service-echo
   namespace: k8s-discord
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
     app: microservice-echo
@@ -32,7 +34,7 @@ spec:
           image: <DOCKER_USER>/microservices-echo:<TAG>
           env:
             - name: INGRESS_HOST
-              value: "http://<INGRESS_HOST>/"
+              value: "http://<INGRESS_IP>/"
             - name: MICROSERVICE_PORT
               value: "7001"
           ports: 

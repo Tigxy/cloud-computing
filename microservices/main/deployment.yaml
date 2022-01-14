@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: k8s-service-main
   namespace: k8s-discord
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
     app: discord-bot
@@ -32,7 +34,7 @@ spec:
           image: <DOCKER_USER>/discord-bot:<TAG>
           env:
             - name: INGRESS_HOST
-              value: "http://<INGRESS_HOST>/"
+              value: "http://<INGRESS_IP>/"
             - name: DISCORD_TOKEN
               value: <DISCORD_TOKEN>
             - name: BOT_COMMAND_PREFIX

@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: k8s-service-math
   namespace: k8s-discord
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
     app: microservice-math
@@ -33,7 +35,7 @@ spec:
           image: <DOCKER_USER>/microservices-math:<TAG>
           env:
             - name: INGRESS_HOST
-              value: "http://<INGRESS_HOST>/"
+              value: "http://<INGRESS_IP>/"
             - name: MICROSERVICE_PORT
               value: "7003"
           ports: 
