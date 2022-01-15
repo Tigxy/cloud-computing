@@ -1,7 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-service-time
+  namespace: k8s-discord
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  selector:
+    app: microservice-time
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 7002
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: microservice-time
+  namespace: k8s-discord
 spec:
   replicas: 1
   selector:
@@ -15,9 +32,17 @@ spec:
     spec:
       containers:              
         - name: microservice-time
-          image: ticks/microservices-time:<TAG>
+          image: <DOCKER_USER>/microservices-time:<TAG>
           env:
+            - name: INGRESS_HOST
+              value: "http://<INGRESS_IP>/"
             - name: MICROSERVICE_PORT
               value: "7002"
           ports: 
             - containerPort: 7002
+          readinessProbe:
+            httpGet:
+              path: /time/health
+              port: 7002
+            initialDelaySeconds: 5
+            periodSeconds: 5

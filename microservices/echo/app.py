@@ -1,15 +1,19 @@
+import logging
 import os
 import time
 import requests
-from flask import request, Flask
+from flask import request, Flask, Response
 
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET"])
+@app.route("/echo", methods=["GET"])
 def service():
     return request.args.get("data")
 
+@app.route("/echo/health", methods=["GET"])
+def health():
+    return Response(status=200)
 
 if __name__ == "__main__":
 
@@ -19,10 +23,10 @@ if __name__ == "__main__":
         print("Env variable 'MICROSERVICE_PORT' not defined, exiting.")
         exit()
 
-    main_service_url = os.environ.get("MAIN_DISCORD_SERVICE_HOST")
-    main_service_port = os.environ.get("MAIN_DISCORD_SERVICE_PORT")
-    if main_service_url is None or main_service_url is None:
-        print("Main Discord service configuration not found, exiting.")
+    ingress_host = os.environ.get("INGRESS_HOST")
+
+    if not ingress_host:
+        print("Ingress host configuration not found, exiting.")
         exit()
 
     registration_data = {
@@ -30,14 +34,16 @@ if __name__ == "__main__":
         "port": port
     }
 
-    not_registered = True
-    while not_registered:
+    registered = False
+    while not registered:
         try:
-            requests.post(f"http://{main_service_url}:{main_service_port}/register", data=registration_data)
-            not_registered = False
-        except:
+            requests.post(f"{ingress_host}/register", data=registration_data)
+            registered = True
+        except Exception as ex:
             print("Failed to register, trying again in 1 s")
-            time.sleep(1)
+            logging.warning("Failed to register, trying again in 10s")
+            time.sleep(10)
 
     print("Registered")
+    logging.info("Registered")
     app.run(host='0.0.0.0', port=port)

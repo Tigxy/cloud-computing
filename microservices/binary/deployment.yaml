@@ -1,48 +1,50 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8s-service-math
+  name: k8s-service-binary
   namespace: k8s-discord
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
-    app: microservice-math
+    app: microservice-binary
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 7003
+      targetPort: 8080
 ---
+
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-math
+  name: microservice-binary
   namespace: k8s-discord
 spec:
   replicas: 1
   selector:
-    matchLabels: 
-      app: microservice-math
+    matchLabels:
+      app: microservice-binary
 
   template:
     metadata:
       labels:
-        app: microservice-math
+        app: microservice-binary
     spec:
       containers:
-        - name: microservice-math
-          image: <DOCKER_USER>/microservices-math:<TAG>
+        - name: microservice-binary
+          image: <DOCKER_USER>/microservices-binary:<TAG>
           env:
             - name: INGRESS_HOST
               value: "http://<INGRESS_IP>/"
             - name: MICROSERVICE_PORT
-              value: "7003"
-          ports: 
-            - containerPort: 7003
+              value: "8080"
+          ports:
+            - containerPort: 8080
           readinessProbe:
             httpGet:
-              path: /math/health
-              port: 7003
+              path: /binary/health
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5
+
