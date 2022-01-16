@@ -2,12 +2,12 @@
 apiVersion: "autoscaling.k8s.io/v1"
 kind: VerticalPodAutoscaler
 metadata:
-  name: stress-vpa
+  name: vpa-stress
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: python-stress-service
+    name: microservice-stress
   updatePolicy: 
     updateMode: Auto
   resourcePolicy:
