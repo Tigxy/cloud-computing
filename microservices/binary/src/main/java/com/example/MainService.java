@@ -14,10 +14,6 @@ import org.slf4j.LoggerFactory;
 
 public class MainService {
 
-    /*private static final String MAIN_SERVICE_URL = System.getenv("MAIN_SERVICE_URL");
-    private static final String MAIN_SERVICE_PORT = System.getenv("MAIN_SERVICE_PORT");
-    private static final String MAIN_SERVICE_URL = System.getenv("MAIN_SERVICE_URL");
-    */
     private static final String INGRESS_HOST = System.getenv("INGRESS_HOST");
 
     private static final Logger logger = LoggerFactory.getLogger(MainService.class);
@@ -45,7 +41,6 @@ public class MainService {
                                 .path("register")
                                 .request(MediaType.TEXT_PLAIN)
                                 .post(entity);
-
 
         String result = response.readEntity(String.class);
         if (200 != response.getStatus() && !result.equals("OK")) {

@@ -1,13 +1,13 @@
-FROM openjdk:8-jdk
-#RUN apt-get update
-#RUN apt-get install -y maven
-#COPY pom.xml /usr/local/gifme/pom.xml
-#COPY src /usr/local/gifme/src
-COPY target/binary-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/local/binary/binary.jar
+FROM maven:3.8.4-openjdk-8-slim as build
+COPY src /tmp/src
+COPY pom.xml /tmp/
+WORKDIR /tmp
+RUN mvn install
+RUN mvn clean package
+
+FROM openjdk:8-jdk as main
+COPY --from=build /tmp/target/binary-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/local/binary/binary.jar
 WORKDIR /usr/local/binary
-#RUN mvn package
 
 EXPOSE 8080
-
-CMD ["ls -la"]
-CMD ["java","-cp","binary.jar", "com.example.Main"]
+ENTRYPOINT ["java","-jar","binary.jar"]

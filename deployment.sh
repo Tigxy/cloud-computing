@@ -65,7 +65,6 @@ docker push k11810066/microservices-math:$TAG
 docker image build -f ./time/Dockerfile -t k11810066/microservices-time:$TAG ./time
 docker push k11810066/microservices-time:$TAG
 # CREATE BINARY MICROSERVICE IMAGE
-mvn clean package -f ./binary/pom.xml
 docker image build -f ./binary/Dockerfile -t k11810066/microservices-binary:$TAG ./binary
 docker push k11810066/microservices-binary:$TAG
 
