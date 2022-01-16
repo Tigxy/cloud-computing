@@ -121,7 +121,7 @@ jobs:
 
       - name: Set image in deployment file
         shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/stress/stress.yaml
+        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/stress/deployment.yaml
 
     #  # Log into Azure
     #  - uses: azure/aks-set-context@v1
