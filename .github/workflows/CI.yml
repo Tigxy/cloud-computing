@@ -179,10 +179,10 @@ jobs:
           kubectl apply -f ${{ github.workspace }}/microservices/namespace.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/main/deployment.yaml
           
-          sleep 60s
+          sleep 30s
           
-          kubectl apply -f ${{ github.workspace }}/microservices/echo/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/time/deployment.yaml
+          kubectl apply -f ${{ github.workspace }}/microservices/echo/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/binary/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/math/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/stress/deployment.yaml
