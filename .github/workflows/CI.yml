@@ -167,6 +167,7 @@ jobs:
       # Deploy image to the GKE cluster
       - name: Deploy
         run: |-
+          kubectl apply -f ${{ github.workspace }}/microservices/namespace.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/main/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/echo/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/time/deployment.yaml
