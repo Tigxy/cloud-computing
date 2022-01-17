@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: microservice-stress
-          image: <DOCKER_USER>/microservice-stress:<TAG>
+          image: <DOCKER_USER>/microservices-stress:<TAG>
           env:
             - name: INGRESS_HOST
               value: "http://<INGRESS_IP>/"
