@@ -166,6 +166,7 @@ jobs:
 
       - name: Delete previous deployments
         run: |-
+          kubectl delete ingress discord-ingress -n k8s-discord
           kubectl delete deployment discord-bot -n k8s-discord
           kubectl delete deployment microservice-echo -n k8s-discord
           kubectl delete deployment microservice-time -n k8s-discord
