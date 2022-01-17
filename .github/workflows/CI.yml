@@ -164,6 +164,15 @@ jobs:
           gcloud container clusters get-credentials "${{ secrets.GKE_CLUSTER }}" --zone "${{ secrets.GKE_ZONE }}"
           gcloud container clusters update "${{ secrets.GKE_CLUSTER }}" --zone "${{ secrets.GKE_ZONE }}" --enable-vertical-pod-autoscaling
 
+      - name: Delete previous deployments
+        run: |-
+          kubectl delete deployment discord-bot -n k8s-discord
+          kubectl delete deployment microservice-echo -n k8s-discord
+          kubectl delete deployment microservice-time -n k8s-discord
+          kubectl delete deployment microservice-math -n k8s-discord
+          kubectl delete deployment microservice-binary -n k8s-discord
+          kubectl delete deployment microservice-stress -n k8s-discord
+
       # Deploy image to the GKE cluster
       - name: Deploy
         run: |-
