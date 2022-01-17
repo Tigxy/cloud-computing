@@ -181,5 +181,5 @@ jobs:
           
           kubectl apply -f ${{ github.workspace }}/ingress_gcloud.yaml
           
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl rollout status deployment/$DEPLOYMENT_NAME -n k8s-discord
           kubectl get services -o wide
