@@ -17,6 +17,13 @@ spec:
                 name: k8s-service-main
                 port:
                   number: 7000 
+          - path: /time
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: k8s-service-time
+                port:
+                  number: 8080
           - path: /echo
             pathType: ImplementationSpecific
             backend:
@@ -31,13 +38,6 @@ spec:
                 name: k8s-service-math 
                 port:
                   number: 8080
-          - path: /time
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: k8s-service-time
-                port:
-                  number: 8080
           - path: /binary
             pathType: ImplementationSpecific
             backend:
@@ -49,6 +49,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: k8s-service-stress
+                name: k8s-lb-stress
                 port:
                   number: 8080
