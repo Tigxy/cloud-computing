@@ -5,7 +5,7 @@ metadata:
   namespace: k8s-discord  
   annotations:
     kubernetes.io/ingress.class : "gce-internal"
-    kubernetes.io/ingress.regional-static-ip-name: "static-ingress-ip" 
+    kubernetes.io/ingress.regional-static-ip-name: "ingress-static-ip" 
 spec:
   rules:
     - http:
