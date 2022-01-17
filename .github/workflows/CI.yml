@@ -166,13 +166,13 @@ jobs:
 
       - name: Delete previous deployments
         run: |-
-          kubectl delete ingress discord-ingress -n k8s-discord
-          kubectl delete deployment discord-bot -n k8s-discord
-          kubectl delete deployment microservice-echo -n k8s-discord
-          kubectl delete deployment microservice-time -n k8s-discord
-          kubectl delete deployment microservice-math -n k8s-discord
-          kubectl delete deployment microservice-binary -n k8s-discord
-          kubectl delete deployment microservice-stress -n k8s-discord
+          kubectl delete ingress discord-ingress -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment discord-bot -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-echo -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-time -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-math -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-binary -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-stress -n k8s-discord --ignore-not-found=true
 
       # Deploy image to the GKE cluster
       - name: Deploy
