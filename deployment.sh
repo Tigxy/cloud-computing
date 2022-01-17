@@ -18,7 +18,7 @@ read TARGET
 # SET KUBECTL CONTEXT TO GCLOUD CLUSTER
 echo "Enter K8S_CLUSTER_CONTEXT GKE cluster for kubectl:"
 read K8S_CLUSTER_CONTEXT
-kubectx $K8S_CLUSTER_CONTEXT 
+kubectx "$K8S_CLUSTER_CONTEXT"
 
 # create namespace in k8s cluster
 kubectl create namespace k8s-discord
@@ -39,7 +39,7 @@ read DISCORD_TOKEN
 echo "Enter BOT_COMMAND_PREFIX for your bot:"
 read BOT_COMMAND_PREFIX
 
-# CREATE YAMLS (DEPLYOMENT + SERVICE) FOR EACH MICROSERVICE YAML
+# CREATE YAMLS (DEPLOYMENT + SERVICE) FOR EACH MICROSERVICE YAML
 cd ./microservices
 for d in */ ; do
     [ -L "${d%/}" ] && continue
@@ -54,19 +54,19 @@ done
 
 # CREATE MAIN MICROSERVICE IMAGE
 docker image build -f ./main/Dockerfile -t k11810066/discord-bot:$TAG ./main
-docker push k11810066/discord-bot:$TAG
+docker push $DOCKER_USER/discord-bot:$TAG
 # CREATE ECHO MICROSERVICE IMAGE
 docker image build -f ./echo/Dockerfile -t k11810066/microservices-echo:$TAG ./echo
-docker push k11810066/microservices-echo:$TAG
+docker push $DOCKER_USER/microservices-echo:$TAG
 # CREATE MATH MICROSERVICE IMAGE
 docker image build -f ./math/Dockerfile -t k11810066/microservices-math:$TAG ./math
-docker push k11810066/microservices-math:$TAG
+docker push $DOCKER_USER/microservices-math:$TAG
 # CREATE TIME MICROSERVICE IMAGE
 docker image build -f ./time/Dockerfile -t k11810066/microservices-time:$TAG ./time
-docker push k11810066/microservices-time:$TAG
+docker push $DOCKER_USER/microservices-time:$TAG
 # CREATE BINARY MICROSERVICE IMAGE
 docker image build -f ./binary/Dockerfile -t k11810066/microservices-binary:$TAG ./binary
-docker push k11810066/microservices-binary:$TAG
+docker push $DOCKER_USER/microservices-binary:$TAG
 
 # DELETE MICROSERVICE DEPLOYMENTS
 kubectl delete deployment discord-bot -n k8s-discord
@@ -83,7 +83,6 @@ kubectl apply -f "./echo/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./math/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./time/deployment_$TAG.yaml" -n k8s-discord
 kubectl apply -f "./binary/deployment_$TAG.yaml" -n k8s-discord
-
 
 cd ..
 # APPLY INGRESS          

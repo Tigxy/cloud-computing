@@ -106,7 +106,15 @@ jobs:
           context: ${{ github.workspace }}/microservices/binary
           push: true
           tags: ticks/microservices-binary:${{ steps.vars.outputs.sha_short }}
-          
+
+      # Build a Docker image based on provided Dockerfile
+      - name: Build and push binary-rs service
+        id: docker_build_binary_rs
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/microservices/binary-rs
+          push: true
+          tags: ticks/microservices-binary-rs:${{ steps.vars.outputs.sha_short }}
       # ================================== DONE ==================================
       
       - name: Replace tokens with secrets
@@ -169,6 +177,7 @@ jobs:
           kubectl delete ingress discord-ingress -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-lb-stress -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-binary -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-binary-rs -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-echo -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-main -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-math -n k8s-discord --ignore-not-found=true
@@ -179,6 +188,7 @@ jobs:
           kubectl delete deployment microservice-time -n k8s-discord --ignore-not-found=true
           kubectl delete deployment microservice-math -n k8s-discord --ignore-not-found=true
           kubectl delete deployment microservice-binary -n k8s-discord --ignore-not-found=true
+          kubectl delete deployment microservice-binary-rs -n k8s-discord --ignore-not-found=true
           kubectl delete deployment microservice-stress -n k8s-discord --ignore-not-found=true
 
       # Deploy image to the GKE cluster
@@ -192,6 +202,7 @@ jobs:
           kubectl apply -f ${{ github.workspace }}/microservices/time/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/echo/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/binary/deployment.yaml
+          kubectl apply -f ${{ github.workspace }}/microservices/binary-rs/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/math/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/stress/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/stress/vpa.yaml

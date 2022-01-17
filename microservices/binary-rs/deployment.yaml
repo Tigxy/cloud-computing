@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-service-binary-rs
+  namespace: k8s-discord
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  selector:
+    app: microservice-binary-rs
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-binary-rs
+  namespace: k8s-discord
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-binary-rs
+
+  template:
+    metadata:
+      labels:
+        app: microservice-binary-rs
+    spec:
+      containers:
+        - name: microservice-binary-rs
+          image: <DOCKER_USER>/microservices-binary-rs:<TAG>
+          env:
+            - name: INGRESS_HOST
+              value: "http://<INGRESS_IP>/"
+            - name: MICROSERVICE_PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /binary-rs/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+

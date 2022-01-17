@@ -293,7 +293,7 @@ gcloud compute networks subnets create backend-subnet \
 gcloud compute networks subnets create proxy-only-subnet \
   --purpose=INTERNAL_HTTPS_LOAD_BALANCER \
   --role=ACTIVE \
-  --region=us-west1 \
+  --region=europe-west1 \
   --network=lb-network \
   --range=10.129.0.0/23
 ```
@@ -325,7 +325,7 @@ gcloud compute firewall-rules create fw-allow-proxies \
   --network=lb-network \
   --action=allow \
   --direction=ingress \
-  --source-ranges=source-range \
+  --source-ranges=10.129.0.0/23 \
   --target-tags=load-balanced-backend \
   --rules=tcp:80,tcp:443,tcp:8080
 ```
@@ -335,7 +335,7 @@ gcloud compute firewall-rules create fw-allow-proxies \
 ```bash
 gcloud container clusters create discord-cluster \
     --enable-ip-alias \
-    --zone=europe-west4-b \
+    --zone=europe-west1-b \
     --network=lb-network \
     --subnetwork=backend-subnet
 ```

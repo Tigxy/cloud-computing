@@ -45,6 +45,13 @@ spec:
                 name: k8s-service-binary
                 port:
                   number: 8080
+          - path: /binary-rs
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: k8s-service-binary-rs
+                port:
+                  number: 8080
           - path: /stress
             pathType: ImplementationSpecific
             backend:
