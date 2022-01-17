@@ -167,6 +167,13 @@ jobs:
       - name: Delete previous deployments
         run: |-
           kubectl delete ingress discord-ingress -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-lb-stress -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-binary -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-echo -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-main -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-math -n k8s-discord --ignore-not-found=true
+          kubectl delete service k8s-service-time -n k8s-discord --ignore-not-found=true
+          kubectl delete vpa vpa-stress -n k8s-discord --ignore-not-found=true
           kubectl delete deployment discord-bot -n k8s-discord --ignore-not-found=true
           kubectl delete deployment microservice-echo -n k8s-discord --ignore-not-found=true
           kubectl delete deployment microservice-time -n k8s-discord --ignore-not-found=true
