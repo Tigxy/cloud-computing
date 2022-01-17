@@ -13,6 +13,8 @@ on:
 
 env:
   DEPLOYMENT_NAME: discord-bot # TODO: update deployment name if changed in deployment.yaml
+  INGRESS_IP: "10.1.2.10"
+  BOT_COMMAND_PREFIX: "!"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -95,34 +97,32 @@ jobs:
           context: ${{ github.workspace }}/microservices/stress
           push: true
           tags: ticks/microservices-stress:${{ steps.vars.outputs.sha_short }}
+
+      # Build a Docker image based on provided Dockerfile
+      - name: Build and push binary service
+        id: docker_build_binary
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ github.workspace }}/microservices/binary
+          push: true
+          tags: ticks/microservices-binary:${{ steps.vars.outputs.sha_short }}
           
       # ================================== DONE ==================================
       
-      # Provide the discord access token for the bot by replacing the placeholder
-      - name: Set discord access token
+      - name: Replace tokens with secrets
         shell: bash
-        run: sed -i "s/<SECRET_DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" ${{ github.workspace }}/microservices/main/deployment.yaml
-
-      - name: Set image in deployment file
-        shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/main/deployment.yaml
-
-      - name: Set image in deployment file
-        shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/echo/deployment.yaml
+        run: |- 
+          cd ${{ github.workspace }}/microservices
+          for d in */ ; do
+              [ -L "${d%/}" ] && continue
+              echo "replace placeholders for $d microservice.."
+              sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" "$d/deployment.yaml"
+              sed -i "s/<DOCKER_USER>/${{ secrets.DOCKERHUB_USERNAME }}/g" "$d/deployment.yaml"
+              sed -i "s/<INGRESS_IP>/$INGRESS_IP/g" "$d/deployment.yaml"
+              sed -i "s/<DISCORD_TOKEN>/${{ secrets.DISCORD_TOKEN }}/g" "$d/deployment.yaml"
+              sed -i "s/<BOT_COMMAND_PREFIX>/$BOT_COMMAND_PREFIX/g" "$d/deployment.yaml"
+          done
         
-      - name: Set image in deployment file
-        shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/time/deployment.yaml
-
-      - name: Set image in deployment file
-        shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/math/deployment.yaml
-
-      - name: Set image in deployment file
-        shell: bash
-        run: sed -i "s/<TAG>/${{ steps.vars.outputs.sha_short }}/g" ${{ github.workspace }}/microservices/stress/deployment.yaml
-
     #  # Log into Azure
     #  - uses: azure/aks-set-context@v1
     #    with:
@@ -169,10 +169,17 @@ jobs:
         run: |-
           kubectl apply -f ${{ github.workspace }}/microservices/namespace.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/main/deployment.yaml
+          
+          sleep 60s
+          
           kubectl apply -f ${{ github.workspace }}/microservices/echo/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/time/deployment.yaml
+          kubectl apply -f ${{ github.workspace }}/microservices/binary/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/math/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/stress/deployment.yaml
           kubectl apply -f ${{ github.workspace }}/microservices/stress/vpa.yaml
+          
+          kubectl apply -f ${{ github.workspace }}/ingress_gcloud.yaml
+          
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
