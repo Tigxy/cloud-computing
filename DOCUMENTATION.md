@@ -46,26 +46,24 @@ The update mode is set to 'Auto', which enables the VPA updater to terminate and
 * At least 3 replicas are required in the deployment to support automatic updating of pods.
 * For trying it out locally, it is recommended to set the `cpu` value to `1m`. The service is set up as a web service that will only execute load when requests are generated. Usually, when trying this out locally, it can take a bit to start up everything and also execute requests. If one sets the value too high, it might be the case that VPA does not update in the first run and then refrains from updating for many hours as the upper bound is set too high. More on that later in the **Findings** section.
 
-## Local setup notes
-* **Note for `minikube` users:** VPA is not part of minikube by default, therefore one needs to manually install it by following the instructions [here](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#installation).
-* **Note for `minikube` users:** The VPA relies on the metric server to get recent CPU and memory values. The metric server is disabled by default in minikube. You can enable it with ```minikube addons enable metrics-server```.
-
-
 ## Tutorial (for trying it out locally)
 We advise for a local test with only the `stress` microservice, as it is hard to show quick reactions of the VPA in a running environment. We focus on a tutorial with `minikube`.
+
+* **Note for `minikube` users:** VPA is not part of minikube by default, therefore one needs to manually install it by following the instructions [here](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#installation).
+* **Note for `minikube` users:** The VPA relies on the metric server to get recent CPU and memory values. The metric server is disabled by default in minikube. You can enable it with ```minikube addons enable metrics-server```.
 
 1. Switch to the `microservices/stress` directory.
 2. Apply the deployment and load balancer with `kubectl apply -f deployment_local.yaml`. The local version has no placeholders that need to be filled and no support for ingress. We don't apply the VPA yet, 
 to generate load first and later let the VPA get load metrics which already 
 show high load.
 4. **Note for `minikube` users:** Start a tunnel with `minikube tunnel`.
-5. **Note for `minikube` users:** Expose the load balancer in minikube with `minikube service k8s-lb-stress`. This should automatically open a browser window for the local URL. If not, copy the local URL into a new browser tab, e.g. 'http://127.0.0.1:60771'. You can check if you did everything correctly until now and that the service is accessible by calling your local URL on the path '/stress/health' - if you get a 200 response, everything works. 
+5. **Note for `minikube` users:** Expose the load balancer in minikube with `minikube service k8s-lb-stress -n k8s-discord`. This should automatically open a browser window for the local URL. If not, copy the local URL into a new browser tab, e.g. 'http://127.0.0.1:60771'. You can check if you did everything correctly until now and that the service is accessible by calling your local URL on the path '/stress/health' - if you get a 200 response, everything works. 
 6. Generate some load by accessing this URL with a request, e.g. `http://127.0.0.1:60771/stress?data=10m%208p`. Do this in a few tabs, e.g. 5, to make sure that all replicas get some load.
-7. Execute `kubectl top pods` and wait for the metric server to get recent metrics for all pods that show that they execute load.
-8. Look at one of the pods that is returned with `kubectl get pods` with `kubectl describe pod <pod>` and check the assigned CPU resources. It should be `1m`.
+7. Execute `kubectl top pods -n k8s-discord` and wait for the metric server to get recent metrics for all pods that show that they execute load.
+8. Look at one of the pods that is returned with `kubectl get pods -n k8s-discord` with `kubectl describe pod <pod> -n k8s-discord` and check the assigned CPU resources. It should be `1m`.
 9. Apply the `vpa.yaml` with `kubectl apply -f vpa.yaml`.
-10. Execute `kubectl get pods` a few times until you see pods being terminated and new ones spun up.
-11. Execute `kubectl describe pod <pod>` for one of the new ones. You should see a higher CPU value now. Note: Sometimes, this takes up to a few minutes.
+10. Execute `kubectl get pods -n k8s-discord` a few times until you see pods being terminated and new ones spun up.
+11. Execute `kubectl describe pod <pod> -n k8s-discord` for one of the new ones. You should see a higher CPU value now. Note: Sometimes, this takes up to a few minutes.
 
 
 ## Summary of lessons learned
