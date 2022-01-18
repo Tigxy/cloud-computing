@@ -1,3 +1,11 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: k8s-stress-lb-backendconfig
+spec:
+  timeoutSec: 610
+---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,6 +13,7 @@ metadata:
   namespace: k8s-discord
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/backend-config: '{"default": "k8s-stress-lb-backendconfig"}'
 spec:
   selector:
     app: microservice-stress
