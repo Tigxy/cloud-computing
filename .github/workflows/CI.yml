@@ -176,6 +176,7 @@ jobs:
         run: |-
           kubectl delete ingress discord-ingress -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-lb-stress -n k8s-discord --ignore-not-found=true
+          kubectl delete backendconfig k8s-stress-lb-backendconfig -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-binary -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-binary-rs -n k8s-discord --ignore-not-found=true
           kubectl delete service k8s-service-echo -n k8s-discord --ignore-not-found=true

@@ -30,14 +30,22 @@ def execute(query: str):
     split = query.split()
     exec_time = int(split[0][:-1])
 
+    if len(split) == 0 or len(split) > 2:
+        return "invalid format"
+
     if (split[0][-1] == "m"):
         exec_time *= 60
     elif split[0][-1] == "s":
         exec_time *= 1
     else:
-        raise ValueError()
+        return "invalid format"
 
-    num_processes = int(split[1][:-1])
+    if exec_time > 10 * 60:
+        return "max time is 10m"
+
+    num_processes = 1
+    if len(split) >= 2:
+        num_processes = int(split[1][:-1])
 
     # start stress processes
     processes = [None] * num_processes
