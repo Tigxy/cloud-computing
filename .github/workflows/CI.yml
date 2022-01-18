@@ -172,25 +172,11 @@ jobs:
           gcloud container clusters get-credentials "${{ secrets.GKE_CLUSTER }}" --zone "${{ secrets.GKE_ZONE }}"
           gcloud container clusters update "${{ secrets.GKE_CLUSTER }}" --zone "${{ secrets.GKE_ZONE }}" --enable-vertical-pod-autoscaling
 
-      - name: Delete previous deployments
+      # Deleting the namespace leads to deleting everything related to the previous deployment
+      # This is to avoid any race conditions where not-recreated k8s objects lead to problems
+      - name: Delete previous deployment
         run: |-
-          kubectl delete ingress discord-ingress -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-stress -n k8s-discord --ignore-not-found=true
-          kubectl delete backendconfig k8s-service-stress-backendconfig -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-binary -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-binary-rs -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-echo -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-main -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-math -n k8s-discord --ignore-not-found=true
-          kubectl delete service k8s-service-time -n k8s-discord --ignore-not-found=true
-          kubectl delete vpa vpa-stress -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment discord-bot -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-echo -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-time -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-math -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-binary -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-binary-rs -n k8s-discord --ignore-not-found=true
-          kubectl delete deployment microservice-stress -n k8s-discord --ignore-not-found=true
+          kubectl delete namespace k8s-discord --ignore-not-found=true
 
       # Deploy image to the GKE cluster
       - name: Deploy
