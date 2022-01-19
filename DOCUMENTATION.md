@@ -2,9 +2,9 @@
 On this page we describe the the tools we used to set up our project. More concretely,
 we cover the following topics:
 
-1. [Project introduction](#basic_project_setup)
-2. [Vertical scaling of individual microservice](#vertical_scaling_of_individual_microservices)
-3. [Using an ingress controller for service communication](#using_an_ingress_controller_for_service_communication)
+1. [Project introduction](#introduction)
+2. [Vertical scaling of individual microservice](#vertical-scaling-of-individual-microservice)
+3. [Using an ingress controller for service communication](#using-an-ingress-controller-for-service-communication)
 
 ## Introduction
 As our project for the computing project course we create a Discord bot that can perform different actions 
