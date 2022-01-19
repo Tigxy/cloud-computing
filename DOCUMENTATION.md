@@ -9,8 +9,11 @@ we cover the following topics:
 ## Introduction
 As our project for the computing project course we create a Discord bot that can perform different actions 
 based on users commands. As an example, we could ask the bot for the current time
+
 ![discord-time](resources/discord-time.png)
+
 or to perform simple calculations
+
 ![discord-math](resources/discord-math.png)
 
 The bot can be deployed on a Kubernetes cloud, and each available command is handled by a specific microservice. 
