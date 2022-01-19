@@ -159,8 +159,6 @@ For our architecture we decided to combine an ingress controller (for routing) w
 cluster-ip services to expose the microservice deployments to our main service. This way we can map bot commands
 to corresponding microservices by specifying path rules in our ingress.yaml.
 
-TODO: general way service set up, deployment, ingress
-
 
 ### Trying it out locally with minikube:
 
