@@ -38,37 +38,38 @@ To be able to automatically deploy and use our bot, we need to create a few diff
 
 1. Discord bot
 	Having a Discord bot is the main prerequisite for a working setup. The bot will later communicate will later listen
-	to user commands and respond to them. In the following we will guide you through the process of setting up a bot:
+	to user commands and respond to them. In the following we will guide you through the process of setting up a bot:  
 	
-	a. Create a new Discord application at https://discord.com/developers/applications
-	b. Head to the 'Bot' settings and click `Add Bot`
-	c. A new 'bot' user should have been created.
+	a. Create a new Discord application at https://discord.com/developers/applications  
+	b. Head to the 'Bot' settings and click `Add Bot`  
+	c. A new 'bot' user should have been created.  
 	d. Copy the access token and add it as `DISCORD_TOKEN` in your Github secrets.
-	![discord-bot](resources/discord-bot-creation.png)
+	![discord-bot](resources/discord-bot-creation.png)  
+	
 	e. To add your application to a server, you need to create a URL for it. Therefore, head to the `OAuth2/URL Generator` tab 
 	and check all scopes and bot permissions that your app must have on a server. In our case the scope is simply `bot` and for
 	our easy examples we only require the roles `Send Messages` and `Read Messages`. A URL will then be generated below, which 
 	you can open to select the server you want to add your bot to.
-	![bot-invite-url](resources/discord-bot-url-generation.png)
+	![bot-invite-url](resources/discord-bot-url-generation.png)  
 	
 	For more information about Discord, using applications and bots, you may also want to read up on the official [Discord documentation](https://discord.com/developers/docs/intro).
 	
 
 2. Dockerhub
-	We will use Dockerhub to publish docker images of our microservices, which we can then later deploy to Kubernetes.
-	a. Generate an Dockerhub access token at https://hub.docker.com/settings/security
-	b. Add your Dockerhub user name as the `DOCKERHUB_USERNAME` secrets
+	We will use Dockerhub to publish docker images of our microservices, which we can then later deploy to Kubernetes.  
+	a. Generate an Dockerhub access token at https://hub.docker.com/settings/security  
+	b. Add your Dockerhub user name as the `DOCKERHUB_USERNAME` secrets  
 	c. Add your Dockerhub access token (that you just created) as `DOCKERHUB_TOKEN`
 	
 
 3. Kubernetes
 	We also need to have access to a Kubernetes cluster where we can deploy our bot and microservices. We choose [Google Cloud](https://cloud.google.com/)
-	as it offers limited free free services for new customers. 
+	as it offers limited free free services for new customers.  
 
-	a. Log into Google Cloud (or create an account if you don't have one yet) and follow the instructions [here](https://cloud.google.com/resource-manager/docs/creating-managing-projects?hl=de) to create a new project.
-	b. As we are using Github Actions, we need to create a service account (SA) to manage Kubernetes via the console. Follow [this](https://cloud.google.com/iam/docs/service-accounts) documentation to create a new SA and add its key as secret `GKE_SA_KEY` to Github secrets. 
-	c. We now set up a new Kubernetes cluster by following the [these](https://cloud.google.com/tools/powershell/docs/container?hl=de) instructions.
-	d. Add the project id, the cluster name and the zone the cluster is deployed to as the Github secrets `GKE_PROJECT`, `GKE_CLUSTER` and `GKE_Zone`, respectively.
+	a. Log into Google Cloud (or create an account if you don't have one yet) and follow the instructions [here](https://cloud.google.com/resource-manager/docs/creating-managing-projects?hl=de) to create a new project.  
+	b. As we are using Github Actions, we need to create a service account (SA) to manage Kubernetes via the console. Follow [this](https://cloud.google.com/iam/docs/service-accounts) documentation to create a new SA and add its key as secret `GKE_SA_KEY` to Github secrets.  
+	c. We now set up a new Kubernetes cluster by following the [these](https://cloud.google.com/tools/powershell/docs/container?hl=de) instructions.  
+	d. Add the project id, the cluster name and the zone the cluster is deployed to as the Github secrets `GKE_PROJECT`, `GKE_CLUSTER` and `GKE_Zone`, respectively.  
 	
 We end up with the following secrets in Github. Please check whether all are present for your configuration, as they are all required.
 ![github secrets overview](resources/github-secrets.png)
