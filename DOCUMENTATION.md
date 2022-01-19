@@ -68,7 +68,7 @@ To be able to automatically deploy and use our bot, we need to create a few diff
 	d. Add the project id, the cluster name and the zone the cluster is deployed to as the Github secrets `GKE_PROJECT`, `GKE_CLUSTER` and `GKE_Zone`, respectively.
 	
 We end up with the following secrets in Github. Please check whether all are present for your configuration, as they are all required.
-![github secrets overview](github-secrets.png)
+![github secrets overview](resources/github-secrets.png)
 
 
 
